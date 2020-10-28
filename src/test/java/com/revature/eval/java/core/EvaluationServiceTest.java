@@ -15,9 +15,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runners.MethodSorters;
+
+//fixes order of test to appear in alphabetically order
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
 public class EvaluationServiceTest {
 
@@ -25,7 +30,7 @@ public class EvaluationServiceTest {
 
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
-
+	
 	/*******************************************************************
 	 * Question 1
 	 ******************************************************************/

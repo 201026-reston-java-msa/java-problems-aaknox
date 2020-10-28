@@ -1,7 +1,15 @@
 package com.revature.eval.java.core;
 
+import java.lang.instrument.Instrumentation;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public class EvaluationService {
@@ -14,8 +22,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String reverse(String string) {
-		
-		return "";
+		// convert the string into a character array
+		char[] letters = string.toCharArray();
+		List<Character> list = new ArrayList<Character>();
+
+		// copy letters into list
+		for (char c : letters) {
+			list.add(c);
+		}
+		// reverse the list
+		Collections.reverse(list);
+		// make a new string with now reverse order
+		ListIterator<Character> li = list.listIterator();
+		String reverse = "";
+		while (li.hasNext()) {
+			reverse += li.next().toString();
+		}
+		return reverse;
 	}
 
 	/**
@@ -28,7 +51,12 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String[] words = phrase.replaceAll("[^a-zA-Z]", " ").toUpperCase().split("\\s+");
+		String a = "";
+		for (int i = 0; i < words.length; i++) {
+			a += words[i].charAt(0);
+		}
+		return a;
 	}
 
 	/**
@@ -81,18 +109,41 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			boolean flag = false;
+
+			if (this.sideOne == this.sideTwo && this.sideTwo == this.sideThree) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+
+			return flag;
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			boolean flag = false;
+
+			if (this.sideOne == this.sideTwo || this.sideOne == this.sideThree) {
+				flag = true;
+			} else if (this.sideTwo == this.sideOne || this.sideTwo == this.sideThree) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+
+			return flag;
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			boolean flag = false;
+
+			if (this.sideOne != this.sideTwo && this.sideOne != this.sideThree) {
+				flag = true;
+			} else {
+				flag = false;
+			}
+
+			return flag;
 		}
 
 	}
@@ -113,8 +164,80 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		// create a hashmap that stores letter and point pairs
+		Map<Character, Integer> scrabbleMap = new HashMap<Character, Integer>();
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		// add info to hashmap
+		for (int i = 0; i < alphabet.length(); i++) {
+			char letter = alphabet.toUpperCase().charAt(i);
+			switch (letter) {
+			case 'A':
+			case 'E':
+			case 'I':
+			case 'O':
+			case 'U':
+			case 'L':
+			case 'N':
+			case 'R':
+			case 'S':
+			case 'T':
+				scrabbleMap.put(alphabet.charAt(i), 1);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 1);
+				break;
+
+			case 'D':
+			case 'G':
+				scrabbleMap.put(alphabet.charAt(i), 2);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 2);
+				break;
+
+			case 'B':
+			case 'C':
+			case 'M':
+			case 'P':
+				scrabbleMap.put(alphabet.charAt(i), 3);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 3);
+				break;
+
+			case 'F':
+			case 'H':
+			case 'V':
+			case 'W':
+			case 'Y':
+				scrabbleMap.put(alphabet.charAt(i), 4);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 4);
+				break;
+
+			case 'K':
+				scrabbleMap.put(alphabet.charAt(i), 5);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 5);
+				break;
+
+			case 'J':
+			case 'X':
+				scrabbleMap.put(alphabet.charAt(i), 8);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 8);
+				break;
+
+			case 'Q':
+			case 'Z':
+				scrabbleMap.put(alphabet.charAt(i), 10);
+				scrabbleMap.put(alphabet.toLowerCase().charAt(i), 10);
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		// calculate score based on string parameter
+		int score = 0;
+		for (int j = 0; j < string.length(); j++) {
+			score += scrabbleMap.get(string.charAt(j));
+		}
+
+		return score;
 	}
 
 	/**
@@ -149,8 +272,39 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+//		String cleanNumber = "";
+//		boolean check = Pattern.matches("[^0-9]+", string);
+//		if(check == false) {
+//			//check for digit only string failed
+//			throw new IllegalArgumentException();
+//		}else {
+//			//clean phone number
+//			cleanNumber = string.replaceAll("[^0-9]", "");
+//			//check for too many numbers
+//			if(cleanNumber.length() >= 12){
+//				throw new IllegalArgumentException();
+//			}else {
+//				return cleanNumber;
+//			}
+//		}
+		//
+		// get a 12 digits String, filling with left '0' (on the prefix)
+		DecimalFormat phoneDecimalFmt = new DecimalFormat("0000000000");
+		String cleaned = string.replaceAll("[^0-9]", "");
+		long number = Long.parseLong(cleaned);
+		String phoneRawString = phoneDecimalFmt.format(number);
+
+		MessageFormat phoneMsgFmt = new MessageFormat("{0}{1}{2}");
+		// suposing a grouping of 3-3-4
+		String[] phoneNumArr = { phoneRawString.substring(0, 3), phoneRawString.substring(3, 6),
+				phoneRawString.substring(6) };
+
+		String s = phoneMsgFmt.format(phoneNumArr);
+		if (phoneNumArr[0].charAt(0) == '0' || s.length() >= 12) {
+			throw new IllegalArgumentException();
+		}
+
+		return s;
 	}
 
 	/**
@@ -163,8 +317,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		HashMap<String, Integer> wordMap = new HashMap<String, Integer>();
+		// convert phrase into string array
+		String test = string.replace(",", " ");
+		String[] words = test.toLowerCase().split("\\s+");
+
+		for (String word : words) {
+			if (wordMap.containsKey(word)) {
+				wordMap.put(word, wordMap.get(word) + 1);
+			} else {
+				wordMap.put(word, 1);
+			}
+		}
+		return wordMap;
 	}
 
 	/**
@@ -206,8 +371,13 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			int size = getSortedList().size();
+			for (int i = 0; i < size; i++) {
+				if (getSortedList().get(i).equals(t)) {
+					return i; // The name has been found in position i.
+				}
+			}
+			return -1; // The name does not exist in the array.
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -243,8 +413,22 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String temp = string.toLowerCase();
+		char[] vowels = {'a', 'e', 'i', 'o', 'u'};
+		char first = temp.charAt(0);
+
+		
+		for (int i = 0; i < vowels.length; i++) {
+			if (first == vowels[i]) {
+				return string + "ay";
+			}
+		}
+		
+		string = string.substring(1);
+		string += first + "ay";
+		
+		
+		return string;
 	}
 
 	/**
@@ -263,7 +447,7 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+		// check if number is 
 		return false;
 	}
 
