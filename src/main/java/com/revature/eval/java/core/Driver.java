@@ -4,11 +4,9 @@ public class Driver {
 
 	public static void main(String[] args) {
 		EvaluationService es = new EvaluationService();
-		String[] words = { "fair", "away", "test" };
-		  for (String word : words) {
-		    String s = es.toPigLatin(word);
-		    System.out.println(word + " is " + s);
-		  }
+		String s = "What is 1 plus 1?";
+		int answer = es.solveWordProblem(s);
+		System.out.println("Answer: " + answer);
 	}
 
 }

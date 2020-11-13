@@ -1,12 +1,10 @@
 package com.revature.eval.java.core;
 
-import java.lang.instrument.Instrumentation;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -718,8 +716,48 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		//split up string into words
+		String mystring = string.replaceAll("[^a-zA-Z-0-9]", " ");
+		System.out.println("Removed question mark string: " + mystring);
+		String[] words = mystring.split(" ");
+		int size = words.length;
+		int index = 0;
+		int num1 = 0;
+		int num2 = Integer.parseInt(words[size-1]);
+		String operator = "";
+		for (String s : words) {
+			System.out.println("Word at index " + index + ": " + s);
+			//find first number --> third word in array
+			if(s.equals(words[2])) {
+				num1 = Integer.parseInt(s);
+			// find operator --> fourth word in array
+			}else if(s.equals(words[3])) {
+				operator = s;
+			}
+			index++;
+		}
+		
+		//calculate problem based on operator
+		System.out.println(String.format("Problem: %d %s %d", num1, operator, num2));
+		int answer = 0;
+		switch(operator) {
+		case "plus":
+			answer = num1 + num2;
+			break;
+		case "minus":
+			answer = num1 - num2;
+			break;
+		case "multiplied":
+			answer = num1 * num2;
+			break;
+		case "divided":
+			answer = num1 / num2;
+			break;
+		default:
+			break;
+		}
+		//return the answer
+		return answer;
 	}
 
 }
